@@ -119,11 +119,7 @@ body::-webkit-scrollbar {
 
 .background::before {
   content: "";
-  background-image: linear-gradient(
-    -180deg,
-    rgba(0, 0, 0, 0.025) 0,
-    rgba(0, 0, 0, 0.075) 99%
-  );
+  background-image: linear-gradient(-180deg, rgba(0, 0, 0, 0.025) 0, rgba(0, 0, 0, 0.075) 99%);
   position: absolute;
   left: 0;
   right: 0;
@@ -645,7 +641,7 @@ body::-webkit-scrollbar {
 
 .pagination__button svg {
   width: 10px;
-  transform: translateY(1px);
+  /* transform: translateY(1px); */
 }
 
 .pagination__button:hover,
@@ -790,11 +786,7 @@ body::-webkit-scrollbar {
   height: 174px;
   top: 0;
   left: 0;
-  background-image: linear-gradient(
-    to top,
-    rgba(0, 0, 0, 0.7),
-    rgba(0, 0, 0, 0.15)
-  );
+  background-image: linear-gradient(to top, rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.15));
   z-index: -1;
   border-top-right-radius: 8px;
 }

@@ -3,7 +3,7 @@ import { BookmarkIcon, Spinner } from "./";
 
 export default function JobItemContent() {
   const activeJobId = useActiveJobId();
-  const [activeJobItem, isLoading] = useActiveJobItem(activeJobId);
+  const { isLoading, activeJobItem } = useActiveJobItem(activeJobId);
 
   if (isLoading) {
     return <LoadingJobContent />;

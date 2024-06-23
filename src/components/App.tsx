@@ -19,9 +19,23 @@ import {
 import { useDebounce, useJobItems } from "../lib/hooks";
 
 function App() {
+  // state
   const [searchText, setSearchText] = useState<string>("");
+  const [currentPage, setCurrentPage] = useState<number>(0);
   const debounceSearchText = useDebounce(searchText);
-  const [jobItemsSliced, isLoading, noOfJobs] = useJobItems(debounceSearchText);
+  const { jobItems, isLoading } = useJobItems(debounceSearchText);
+  // dervied state
+  const noOfJobs = jobItems.length;
+  const jobItemsSliced = jobItems.slice(0, 7);
+
+  // handlers
+  const handleChangePage = (direction: "next" | "previous") => {
+    if (direction === "next") {
+      setCurrentPage((prev) => prev + 1);
+    } else if (direction === "previous") {
+      setCurrentPage((prev) => prev - 1);
+    }
+  };
 
   return (
     <>
@@ -49,7 +63,10 @@ function App() {
             jobItems={jobItemsSliced}
             isLoading={isLoading}
           />
-          <PaginationControls />
+          <PaginationControls
+            currentPage={currentPage}
+            onClick={handleChangePage}
+          />
         </Sidebar>
 
         <JobItemContent />
