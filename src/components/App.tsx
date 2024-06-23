@@ -1,41 +1,36 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Background,
+  BookmarksButton,
   Container,
   Footer,
   Header,
   HeaderTop,
   JobItemContent,
   JobList,
+  Logo,
   PaginationControls,
+  ResultsCount,
   SearchForm,
   Sidebar,
   SidebarTop,
+  SortingControls,
 } from "./";
+import { useDebounce, useJobItems } from "../lib/hooks";
 
 function App() {
   const [searchText, setSearchText] = useState<string>("");
-  const [jobItems, setJobItems] = useState([]);
-
-  useEffect(() => {
-    if (!searchText) {
-      return;
-    }
-
-    const fetchJobs = async () => {
-      const res = await fetch(`https://bytegrad.com/course-assets/projects/rmtdev/api/data?search=${searchText}`);
-      const data = await res.json();
-      setJobItems(data.jobItems);
-    };
-
-    fetchJobs();
-  }, [searchText]);
+  const debounceSearchText = useDebounce(searchText);
+  const [jobItemsSliced, isLoading, noOfJobs] = useJobItems(debounceSearchText);
 
   return (
     <>
       <Background />
       <Header>
-        <HeaderTop />
+        <HeaderTop>
+          <Logo />
+          <BookmarksButton />
+        </HeaderTop>
 
         <SearchForm
           searchText={searchText}
@@ -45,10 +40,18 @@ function App() {
 
       <Container>
         <Sidebar>
-          <SidebarTop />
-          <JobList jobItems={jobItems} />
+          <SidebarTop>
+            <ResultsCount count={noOfJobs} />
+            <SortingControls />
+          </SidebarTop>
+
+          <JobList
+            jobItems={jobItemsSliced}
+            isLoading={isLoading}
+          />
           <PaginationControls />
         </Sidebar>
+
         <JobItemContent />
       </Container>
       <Footer />

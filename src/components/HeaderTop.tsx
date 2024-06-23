@@ -1,11 +1,8 @@
-import { BookmarksButton, Logo } from "./";
+type HeaderTopProps = {
+  children: React.ReactNode;
+};
 
-function HeaderTop() {
-  return (
-    <div className="header__top">
-      <Logo />
-      <BookmarksButton />
-    </div>
-  );
+function HeaderTop({ children }: HeaderTopProps) {
+  return <div className="header__top">{children}</div>;
 }
 export default HeaderTop;

@@ -1,5 +1,3 @@
-import { JobList, PaginationControls, SidebarTop } from "./";
-
 type SidebarProps = {
   children: React.ReactNode;
 };
