@@ -1,11 +1,21 @@
 import { TriangleDownIcon } from "@radix-ui/react-icons";
+import { BookmarksPopover } from "./";
+import { useState } from "react";
 
 export default function BookmarksButton() {
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+
   return (
     <section>
-      <button className="bookmarks-btn">
+      <button
+        onClick={() => {
+          setIsOpen((prev) => !prev);
+        }}
+        className="bookmarks-btn">
         Bookmarks <TriangleDownIcon />
       </button>
+
+      {isOpen && <BookmarksPopover />}
     </section>
   );
 }
