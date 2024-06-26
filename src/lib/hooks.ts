@@ -8,13 +8,13 @@ import { SearchTextContext } from "../context/SearchTextContextProvider";
 import { JobItemsContext } from "../context/JobItemsContextProvider";
 
 export const useActiveJobItem = (id: number | null) => {
-  const { data, isInitialLoading } = useQuery({
+  const { data, isInitialLoading, error } = useQuery({
     queryKey: ["job-item", id],
     queryFn: () => (id ? fetchActiveJobItem(id) : null),
     enabled: !!id,
   });
 
-  return { activeJobItem: data?.jobItem, isLoading: isInitialLoading } as const;
+  return { activeJobItem: data?.jobItem, isLoading: isInitialLoading, error } as const;
 };
 
 export function useJobItems(ids: number[]) {
@@ -109,13 +109,9 @@ export function useOnClickOutside(refs: React.RefObject<HTMLElement>[], handler:
     const handleClick = (e: MouseEvent) => {
       const target = e.target as HTMLElement;
 
-      console.log(refs[1].current?.contains(target));
-
       if (refs.some((ref) => ref.current?.contains(target))) {
         return;
       }
-
-      console.log("I passed the gaurd");
 
       handler();
     };

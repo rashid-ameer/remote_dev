@@ -1,3 +1,4 @@
+import { Toaster } from "react-hot-toast";
 import {
   Background,
   BookmarksButton,
@@ -43,6 +44,8 @@ function App() {
         <JobItemContent />
       </Container>
       <Footer />
+
+      <Toaster />
     </>
   );
 }

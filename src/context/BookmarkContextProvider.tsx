@@ -1,6 +1,7 @@
 import { createContext } from "react";
 import { useJobItems, useLocalStorage } from "../lib/hooks";
 import { JobItemExtended } from "../lib/types";
+import toast from "react-hot-toast";
 
 type PropsBookmarkContext = {
   bookmarkIds: number[];
@@ -23,8 +24,10 @@ function BookmarkContextProvider({ children }: PropsBookmarkContextProvider) {
   const toggleBookmarkId = (id: number) => {
     if (bookmarkIds.includes(id)) {
       setBookmarkIds((prev) => prev.filter((bookmarkId) => bookmarkId !== id));
+      toast.success("Bookmark removed");
     } else {
       setBookmarkIds((prev) => [...prev, id]);
+      toast.success("Bookmark added");
     }
   };
 

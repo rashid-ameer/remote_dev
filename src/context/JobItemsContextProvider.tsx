@@ -1,4 +1,4 @@
-import { createContext, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from "react";
 import { JobItem, PageDirection, SortBy } from "../lib/types";
 import { useSearchQuery, useSearchTextContext } from "../lib/hooks";
 import { RESULTS_PER_PAGE } from "../lib/constants";
@@ -43,39 +43,49 @@ export default function JobItemsContextProvider({ children }: JobItemsContextPro
     [jobItems, sortBy]
   );
 
-  const jobItemsSortedAndSliced = jobItemsSorted.slice(
-    (currentPage - 1) * RESULTS_PER_PAGE,
-    currentPage * RESULTS_PER_PAGE
+  const jobItemsSortedAndSliced = useMemo(
+    () => jobItemsSorted.slice((currentPage - 1) * RESULTS_PER_PAGE, currentPage * RESULTS_PER_PAGE),
+    [currentPage, jobItemsSorted]
   );
 
   // handlers
-  const handleChangePage = (direction: PageDirection) => {
+  const handleChangePage = useCallback((direction: PageDirection) => {
     if (direction === "next") {
       setCurrentPage((prev) => prev + 1);
     } else if (direction === "previous") {
       setCurrentPage((prev) => prev - 1);
     }
-  };
+  }, []);
 
-  const handleSortChange = (sortBy: SortBy) => {
+  const handleSortChange = useCallback((sortBy: SortBy) => {
     setCurrentPage(1);
     setSortBy(sortBy);
-  };
+  }, []);
 
-  return (
-    <JobItemsContext.Provider
-      value={{
-        jobItems,
-        isLoading,
-        currentPage,
-        sortBy,
-        noOfJobs,
-        totalNoOfPages,
-        jobItemsSortedAndSliced,
-        handleChangePage,
-        handleSortChange,
-      }}>
-      {children}
-    </JobItemsContext.Provider>
+  const context = useMemo(
+    () => ({
+      jobItems,
+      isLoading,
+      currentPage,
+      sortBy,
+      noOfJobs,
+      totalNoOfPages,
+      jobItemsSortedAndSliced,
+      handleChangePage,
+      handleSortChange,
+    }),
+    [
+      jobItems,
+      isLoading,
+      currentPage,
+      sortBy,
+      noOfJobs,
+      totalNoOfPages,
+      jobItemsSortedAndSliced,
+      handleChangePage,
+      handleSortChange,
+    ]
   );
+
+  return <JobItemsContext.Provider value={context}>{children}</JobItemsContext.Provider>;
 }

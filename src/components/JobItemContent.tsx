@@ -1,9 +1,19 @@
 import { useActiveIdContext, useActiveJobItem } from "../lib/hooks";
 import { BookmarkIcon, Spinner } from "./";
+import { useEffect } from "react";
+import { handleError } from "../lib/utils";
+import toast from "react-hot-toast";
 
 export default function JobItemContent() {
   const { activeId } = useActiveIdContext();
-  const { isLoading, activeJobItem } = useActiveJobItem(activeId);
+  const { isLoading, activeJobItem, error } = useActiveJobItem(activeId);
+
+  useEffect(() => {
+    if (error) {
+      const message = handleError(error);
+      toast.error(message);
+    }
+  }, [error]);
 
   if (isLoading) {
     return <LoadingJobContent />;
