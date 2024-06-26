@@ -3,6 +3,9 @@ import { useQueries, useQuery } from "@tanstack/react-query";
 import { fetchActiveJobItem, fetchJobItems } from "./api";
 import { BookmarkContext } from "../context/BookmarkContextProvider";
 import { JobItemExtended } from "./types";
+import { ActiveIdContext } from "../context/ActiveIdContextProvider";
+import { SearchTextContext } from "../context/SearchTextContextProvider";
+import { JobItemsContext } from "../context/JobItemsContextProvider";
 
 export const useActiveJobItem = (id: number | null) => {
   const { data, isInitialLoading } = useQuery({
@@ -99,4 +102,58 @@ export function useLocalStorage<T>(key: string, initialValue: T) {
   }, [value, key]);
 
   return [value, setValue] as const;
+}
+
+export function useOnClickOutside(refs: React.RefObject<HTMLElement>[], handler: () => void) {
+  useEffect(() => {
+    const handleClick = (e: MouseEvent) => {
+      const target = e.target as HTMLElement;
+
+      console.log(refs[1].current?.contains(target));
+
+      if (refs.some((ref) => ref.current?.contains(target))) {
+        return;
+      }
+
+      console.log("I passed the gaurd");
+
+      handler();
+    };
+
+    window.addEventListener("click", handleClick);
+
+    return () => {
+      window.removeEventListener("click", handleClick);
+    };
+  }, [refs, handler]);
+}
+
+export function useActiveIdContext() {
+  const context = useContext(ActiveIdContext);
+
+  if (!context) {
+    throw new Error("useActiveIdContext must be used within a ActiveIdContextProvider");
+  }
+
+  return context;
+}
+
+export function useSearchTextContext() {
+  const context = useContext(SearchTextContext);
+
+  if (!context) {
+    throw new Error("useSearchTextContext must be used within a SearchTextContextProvider");
+  }
+
+  return context;
+}
+
+export function useJobItemsContext() {
+  const context = useContext(JobItemsContext);
+
+  if (!context) {
+    throw new Error("useJobItemsContext must be used within a JobItemsContextProvider");
+  }
+
+  return context;
 }

@@ -17,3 +17,4 @@ export { default as SortingControls } from "./SortingControls";
 export { default as Spinner } from "./Spinner";
 export { default as HeaderTop } from "./HeaderTop";
 export { default as SidebarTop } from "./SidebarTop";
+export { default as JobListSearch } from "./JobListSearch";
