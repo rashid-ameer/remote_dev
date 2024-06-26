@@ -1,4 +1,4 @@
-import { createContext, useState } from "react";
+import { createContext, useMemo, useState } from "react";
 import { JobItem, PageDirection, SortBy } from "../lib/types";
 import { useSearchQuery, useSearchTextContext } from "../lib/hooks";
 import { RESULTS_PER_PAGE } from "../lib/constants";
@@ -30,14 +30,18 @@ export default function JobItemsContextProvider({ children }: JobItemsContextPro
   // dervied state
   const noOfJobs = jobItems.length;
   const totalNoOfPages = noOfJobs / RESULTS_PER_PAGE;
-  const jobItemsSorted = [...jobItems].sort((a, b) => {
-    if (sortBy === "relevant") {
-      return b.relevanceScore - a.relevanceScore;
-    } else if (sortBy === "recent") {
-      return a.daysAgo - b.daysAgo;
-    }
-    return 0;
-  });
+  const jobItemsSorted = useMemo(
+    () =>
+      [...jobItems].sort((a, b) => {
+        if (sortBy === "relevant") {
+          return b.relevanceScore - a.relevanceScore;
+        } else if (sortBy === "recent") {
+          return a.daysAgo - b.daysAgo;
+        }
+        return 0;
+      }),
+    [jobItems, sortBy]
+  );
 
   const jobItemsSortedAndSliced = jobItemsSorted.slice(
     (currentPage - 1) * RESULTS_PER_PAGE,
